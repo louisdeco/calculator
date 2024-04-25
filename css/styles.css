@@ -95,7 +95,7 @@ body {
     gap: 20px
 }
 
-.button {
+.button-digit, .button-operator, .button-separator, .button-evaluate {
     width: 20%;
     height: 20.3%;
     border-radius: 8px;
@@ -104,7 +104,7 @@ body {
     font-size: 25px;
 }
 
-.button:hover {
+.button-digit:hover, .button-operator:hover, .button-separator:hover, .button-evaluate:hover{
     background: #90E0EF;
     color: white;
 }
