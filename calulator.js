@@ -107,7 +107,7 @@ buttonSeparator.addEventListener("click", () => {
 
 const buttonEvaluate = document.querySelector(".button-evaluate");
 buttonEvaluate.addEventListener("click", () => {
-    if (firstNumber && operator) {
+    if (firstNumber && operator && !calculation.textContent.includes("=")) {
         secondNumber = rawItem;
         rawItem = "";
         operation();
@@ -149,6 +149,106 @@ function operation() {
             break;
     }
 }
+
+// Keyboard input
+document.addEventListener("keydown", (e) => {
+    if ("1234567890".includes(e.key)) {
+        if (computationOver) {
+            firstNumber = "";
+            secondNumber = "";
+            operator = "";
+            rawItem = "";
+            result.textContent = "";
+            calculation.textContent = "";
+            computationOver=false;
+        }
+        if (operator && !rawItem) {
+            rawItem += e.key;
+            result.textContent = "";
+            result.textContent += e.key;
+
+        }
+        else {
+            rawItem += e.key;
+            result.textContent += e.key;
+        }
+    }
+    else if ("+-/*".includes(e.key)){
+        if (operator && firstNumber && !secondNumber && !rawItem) {
+            operator = e.key;
+            calculation.textContent = calculation.textContent.replace(regexOperator, e.key);
+            computationOver=false;
+        }
+        else if (operator && firstNumber && (rawItem)) {
+            secondNumber = rawItem;
+            rawItem="";
+            operation();
+            computationOver=false;
+            firstNumber = result.textContent;
+            operator = e.key;
+            calculation.textContent = result.textContent + " " + operator;
+        }
+        else if (calculation.textContent.includes("=")) {
+            firstNumber = result.textContent;
+            operator = e.key;
+            calculation.textContent = firstNumber + " " + operator;
+            computationOver=false;
+        }
+        else if (!operator) {
+            operator = e.key;
+            firstNumber = rawItem;
+            rawItem="";
+            calculation.textContent = firstNumber + " " + operator;
+        }
+    }
+    else if ("Enter=".includes(e.key)) {
+        if (firstNumber && operator && !calculation.textContent.includes("=")) {
+            secondNumber = rawItem;
+            rawItem = "";
+            operation();
+        }
+    }
+    else if (".".includes(e.key)) {
+        if (!rawItem.includes(".")) {
+            if (computationOver) {
+                firstNumber = "";
+                secondNumber = "";
+                operator = "";
+                rawItem = "";
+                result.textContent = "";
+                calculation.textContent = "";
+                computationOver=false;
+            }
+            if (operator && !rawItem) {
+                rawItem += "0."
+                result.textContent = "";
+                result.textContent += "0.";
+    
+            }
+            else if ((rawItem === "" || !rawItem) && !result.textContent) {
+                rawItem += "0.";
+                result.textContent += "0.";
+            }
+            else {
+                rawItem += buttonSeparator.textContent;
+                result.textContent += buttonSeparator.textContent;
+            }
+        }
+    }
+    else if ("Backspace".includes(e.key)) {
+        result.textContent = "";
+        rawItem = "";
+    }
+
+    else if ("Escape".includes(e.key)) {
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";
+        rawItem = "";
+        result.textContent = "";
+        calculation.textContent = "";
+    }
+})
 
 
 
